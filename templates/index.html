@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clustering on Gene Expression Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <h1>Gene Expression Clustering</h1>
+    <!-- <p>
+      Click any of the below buttons to see the clustering results of the
+      corresponding datasets
+    </p>
+    <div>
+      <button id="GSE0">GSE108474</button>
+      <button id="GSE1">GSE108474</button>
+      <button id="GSE2">GSE108474</button>
+      <button id="GSE3">GSE108474</button>
+      <a href="#" title="results" id="GSE0"
+        >GSE108474</a
+      >
+    </div> -->
+    <main>
+      <form action="/templates/inputClusteringMethod.html" method="post">
+        <textarea title="input" name="data" placeholder="Input your Gene Expression Data" id="input" required></textarea>
+        <button title="submit" type="submit" id="submit">Submit data</button>
+      </form>
+    </main>
+    
+   
+  </body>
+</html>

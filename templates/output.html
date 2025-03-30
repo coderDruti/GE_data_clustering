@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final result</title>
+</head>
+<body>
+  <p>{{result}}</p>
+    <div id="output">
+      <canvas id="myChart"></canvas>
+      <caption id="canvasCaption"></caption>
+    </div>
+     <script>
+      try{
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          // console.log(data["data0"]);
+          // data0 = data["data0"]
+          // data1 = data["data1"]
+          // clusters = data["clusters"]
+          // const ctx = document.getElementById("myChart").getContext("2d");
+          // const colors = ["purple", "yellow"];
+          // const datasets = {
+          //   data: {
+          //     x:data0,
+          //     y:data1,
+          //   },
+          //   // backgroundColor: colors,
+          // };
+          // console.log(datasets);
+          // new Chart(ctx, {
+          //   type: "scatter",
+          //   data: datasets,
+          //   options: {
+          //     scales: {
+          //       x: { title: { display: true, text: "Principal component 1" } },
+          //       y: { title: { display: true, text: "Principal component 2" } },
+          //     },
+          //   },
+          // });
+          // // document.getElementById("canvasCaption").innerText = score;
+        } catch (error) {
+          console.error("Error fetching scatter data", error);
+        }
+    </script>
+</body>
+</html>
