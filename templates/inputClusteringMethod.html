@@ -6,10 +6,11 @@
     <title>Input clustering method</title>
 </head>
 <body>
-    <form action="/templates/output.html" method="post" id="container">
-        <label for="method">Choose a clustering technique</label>
-        <button title="K-means" type="submit">K-means clustering</button>
-        <button title="Agglomerative" type="submit">Agglomerative clustering</button>
+    <form action="/output" method="post" id="container">
+        <label>Choose a clustering technique</label>
+        <input type="hidden" name="method" id="method" value="">
+        <button name="method" value="K-means clustering" type="submit">K-means clustering</button>
+        <button name="method" value="Agglomerative clustering" type="submit">Agglomerative clustering</button>
         <!-- <button title="DBScan" type="submit">DBScan clustering</button> -->
     </form>
 </body>

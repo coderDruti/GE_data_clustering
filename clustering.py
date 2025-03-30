@@ -13,18 +13,20 @@ from sklearn.cluster import AgglomerativeClustering
 import preprocess
 
 def load_data(file):
-    cols = file.readline().decode("utf-8").split("\t")
+    
+    cols, content = file
+    print(content)
 
     data = []
     for x in file:
-        data.append(x.decode("utf-8").split("\t"))
+        data.append(x.split("\t"))
 
     y = []
     for i in range(0, len(data)):
         y.append(data[i][0])
         data[i].pop(0)
 
-    df = pd.DataFrame(data, index = y, columns = cols)
+    df = pd.DataFrame(content, columns = cols)
     return df
 
 

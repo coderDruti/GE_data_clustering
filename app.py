@@ -34,12 +34,13 @@ preprocessed_data = None
 @app.route('/')
 def index():
     return render_template('index.html')
-@app.route("/", methods=["POST"])
+@app.route("/inputClusteringMethod", methods=["POST"])
 def receive_data():
-    received_data = request.form["data"]
+    received_data = request.form["data"].splitlines()
     # received_data = received_data.decode("utf-8").split("\"")
     global preprocessed_data 
     preprocessed_data = received_data
+    print(preprocessed_data)
     # file_ID = items[0]["id"] if received_data[3] =="GSE108474" else ""
     # # print(file_path)
     # req = service.files().get_media(fileId = file_ID)
@@ -52,7 +53,7 @@ def receive_data():
     # # Reset the stream position
     # file_stream.seek(0)
     # # file_content = file_stream.read().decode("utf-8")
-    return redirect("/inputClusteringMethod.html")
+    return redirect("inputClusteringMethod")
 
 @app.route("/inputClusteringMethod")
 def chooseClustering():
@@ -74,7 +75,7 @@ def cluster():
             "clusters_agc":clusters_agc,
             "s_score_agc":s_score_agc
         }
-    return render_template("/templates/output.html", result)
+    return render_template("output.html", result=result)
 
 if __name__ == '__main__':
     app.run(debug=True)

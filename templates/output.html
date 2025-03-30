@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Final result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <p>{{result}}</p>
+  <p></p>
     <div id="output">
       <canvas id="myChart"></canvas>
       <caption id="canvasCaption"></caption>
     </div>
      <script>
-      try{
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const data = await response.json();
-          // console.log(data["data0"]);
+       try{
+          const clusteringResult = JSON.parse("{{ result|tojson|safe }}");
+          // if (!response.ok) {
+          //   throw new Error(`HTTP error! Status: ${response.status}`);
+          // }
+          // const data = await response.json();
+          console.log(clusteringResult);
           // data0 = data["data0"]
           // data1 = data["data1"]
           // clusters = data["clusters"]
