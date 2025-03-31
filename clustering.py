@@ -12,21 +12,29 @@ from sklearn.metrics import silhouette_score
 from sklearn.cluster import AgglomerativeClustering
 import preprocess
 
-def load_data(file):
+def load_data(file, genes):
     
-    cols, content = file
-    print(content)
+    cols = genes[0].split("\t")
+    print(cols)
 
-    data = []
-    for x in file:
-        data.append(x.split("\t"))
+    # data = []
+    # for x in file:
+    #     print(x+"\n")
+    print(file)
+    # for i in range(0, len(file)):
+    data = (file[0].split("\t"))
 
     y = []
+    # # for i in range(0, len(data)):
+    # y.append(data[0][0])
+    y.append(data.pop(0))
+    content = []
     for i in range(0, len(data)):
-        y.append(data[i][0])
-        data[i].pop(0)
+        content.append(data[i])
+    print(content)
+    # print(y)
 
-    df = pd.DataFrame(content, columns = cols)
+    df = pd.DataFrame(content,index=y, columns = cols)
     return df
 
 
@@ -71,8 +79,8 @@ def run_clustering_agc(pca_data):
     clusters_cosine, score_cosine = agg_clustering("cosine", pca_data, 2)
     return clusters_eu, clusters_manhattan, clusters_cosine, score_eu, score_manhattan, score_cosine
 
-def main(data):  
-    df = load_data(data)
+def main(data, genes):  
+    df = load_data(data,genes)
     pca_data_maxAbs, pca_data_stdScaler = preprocess.preprocess_data(df)
     def clustering_data(data):
         clusters = run_clustering_KMeans(data)

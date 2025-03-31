@@ -30,17 +30,20 @@ import clustering
 app = Flask(__name__)
 
 preprocessed_data = None
+genes = None
 
 @app.route('/')
 def index():
     return render_template('index.html')
 @app.route("/inputClusteringMethod", methods=["POST"])
 def receive_data():
-    received_data = request.form["data"].splitlines()
+    receive_data_genes = request.form["genes"].splitlines()
+    received_data_ge = request.form["data"].splitlines()
     # received_data = received_data.decode("utf-8").split("\"")
-    global preprocessed_data 
-    preprocessed_data = received_data
-    print(preprocessed_data)
+    global preprocessed_data, genes
+    genes = receive_data_genes 
+    preprocessed_data = received_data_ge
+    print(preprocessed_data, genes)
     # file_ID = items[0]["id"] if received_data[3] =="GSE108474" else ""
     # # print(file_path)
     # req = service.files().get_media(fileId = file_ID)
@@ -62,7 +65,7 @@ def chooseClustering():
 @app.route("/output", methods=["POST"])
 def cluster():
     method = request.form["method"]
-    clusters_kmeans, s_score_kmeans,clusters_agc,s_score_agc= clustering.main(preprocessed_data) 
+    clusters_kmeans, s_score_kmeans,clusters_agc,s_score_agc= clustering.main(preprocessed_data, genes) 
     if method == "K-means clustering":
         result ={
             "clusters_kmeans":clusters_kmeans,
