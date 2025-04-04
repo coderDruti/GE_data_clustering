@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
-
 import warnings
 warnings.filterwarnings("ignore")
 from sklearn.decomposition import PCA
@@ -11,31 +9,8 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.cluster import AgglomerativeClustering
 import preprocess
-
-def load_data(file, genes):
-    
-    cols = genes[0].split("\t")
-    print(cols)
-
-    # data = []
-    # for x in file:
-    #     print(x+"\n")
-    print(file)
-    # for i in range(0, len(file)):
-    data = (file[0].split("\t"))
-
-    y = []
-    # # for i in range(0, len(data)):
-    # y.append(data[0][0])
-    y.append(data.pop(0))
-    content = []
-    for i in range(0, len(data)):
-        content.append(data[i])
-    print(content)
-    # print(y)
-
-    df = pd.DataFrame(content,index=y, columns = cols)
-    return df
+import pickle
+import load_data
 
 
 
@@ -55,7 +30,10 @@ def run_clustering_KMeans(pca_data_maxAbs):
     # plt.show()
 
     kmeans = KMeans(init = "random", n_clusters=2, random_state=42)
-    clusters = kmeans.fit_predict(pca_data_maxAbs)
+    with open("kmeans.pkl", "wb") as file:
+        pickle.dump(kmeans,file)
+    with open("kmeans.pkl", "rb") as kmeans:
+        clusters = kmeans.fit_predict(pca_data_maxAbs)
     return clusters
 
 def results(clusters, pca_data_maxAbs):
@@ -71,16 +49,19 @@ def results(clusters, pca_data_maxAbs):
 def run_clustering_agc(pca_data):
     def agg_clustering(metric, data, cluster_number):
         agc = AgglomerativeClustering(n_clusters=cluster_number,metric=metric, linkage="average", distance_threshold=None)
-        clusters=agc.fit_predict(data)
-        score = silhouette_score(data,agc.labels_,metric=metric)
+        with open("agc.pkl", "wb") as file:
+            pickle.dump(agc,file)
+        with open("agc.pkl", "rb") as agc:
+            clusters=agc.fit_predict(data)
+            score = silhouette_score(data,agc.labels_,metric=metric)
         return clusters, score
     clusters_eu, score_eu = agg_clustering("euclidean", pca_data, 2)
     clusters_manhattan, score_manhattan = agg_clustering("manhattan", pca_data, 2)
     clusters_cosine, score_cosine = agg_clustering("cosine", pca_data, 2)
     return clusters_eu, clusters_manhattan, clusters_cosine, score_eu, score_manhattan, score_cosine
 
-def main(data, genes):  
-    df = load_data(data,genes)
+def main(data):  
+    df = load_data.load_data(data)
     pca_data_maxAbs, pca_data_stdScaler = preprocess.preprocess_data(df)
     def clustering_data(data):
         clusters = run_clustering_KMeans(data)

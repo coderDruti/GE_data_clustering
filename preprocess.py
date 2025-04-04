@@ -16,7 +16,7 @@ def standardize_data_stdScaler(df):
     return X_train_stdScaler
 
 def pca(X_train):
-    pca = PCA(n_components=2)
+    pca = PCA(n_components=1)
     pca_data = pca.fit_transform(X_train)
     return pca_data
 

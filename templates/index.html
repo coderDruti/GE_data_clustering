@@ -23,8 +23,12 @@
     </div> -->
     <main>
       <form action="/inputClusteringMethod" method="post">
-        <textarea title="input" name="genes" placeholder="Input id of genes" id="inputgenes" required></textarea>
-        <textarea title="input" name="data" placeholder="Input your Gene Expression Data" id="inputcontent" required></textarea>
+        <!-- <textarea title="input" name="samples" placeholder="Input id of samples" id="inputsamples" required></textarea> -->
+        <select title="input" name="data" placeholder="Input your Gene Expression Data" id="inputcontent" required>
+          <option value="GSE108474" name="data">GSE108474</option>
+          <option value="GSM1214834" name="data">GSM1214834</option>
+          <option value="GSM317711" name="data">GSM317711</option>
+        </select>
         <button title="submit" type="submit" id="submit">Submit data</button>
       </form>
     </main>
