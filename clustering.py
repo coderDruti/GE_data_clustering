@@ -60,30 +60,39 @@ def run_clustering_agc(pca_data):
     clusters_cosine, score_cosine = agg_clustering("cosine", pca_data, 2)
     return clusters_eu, clusters_manhattan, clusters_cosine, score_eu, score_manhattan, score_cosine
 
-def main(data):  
+def main(data, clustering_method):  
     df = load_data.load_data(data)
     pca_data_maxAbs, pca_data_stdScaler = preprocess.preprocess_data(df)
-    def clustering_data(data):
-        clusters = run_clustering_KMeans(data)
-        silhouette_score = results(clusters,data)
-        clusters_eu, clusters_manhattan, clusters_cosine, score_eu, score_manhattan, score_cosine = run_clustering_agc(data)
-        metric = max(score_cosine, score_eu, score_manhattan)
-        if metric == score_cosine:
-            clusters_agc = clusters_cosine
-        elif metric == score_eu:
-            clusters_agc = clusters_eu
-        else:
-            clusters_agc = clusters_manhattan
-        return clusters, silhouette_score,clusters_agc, 
+    def clustering_data(data, method):
+        if method == "K-means clustering":
+            clusters = run_clustering_KMeans(data)
+            silhouette_score = results(clusters,data)
+            return clusters, silhouette_score
+        elif method == "Agglomerative clustering":
+            clusters_eu, clusters_manhattan, clusters_cosine, score_eu, score_manhattan, score_cosine = run_clustering_agc(data)
+            metric = max(score_cosine, score_eu, score_manhattan)
+            if metric == score_cosine:
+                clusters_agc = clusters_cosine
+            elif metric == score_eu:
+                clusters_agc = clusters_eu
+            else:
+                clusters_agc = clusters_manhattan
+            return clusters_agc, metric
 
-    clusters_kmeans_maxAbs, s_score_kmeans_maxAbs, clusters_agc_maxAbs, s_score_agc_maxAbs = clustering_data(pca_data_maxAbs)
-    clusters_kmeans_stdScaler,s_score_kmeans_stdScaler, clusters_agc_stdScaler, s_score_agc_stdScaler = clustering_data(pca_data_stdScaler)
-    preprocessor_kmeans = max(s_score_kmeans_maxAbs,s_score_kmeans_stdScaler)
-    preprocessor_agc = max(s_score_agc_maxAbs, s_score_agc_stdScaler)
-    if preprocessor_kmeans == s_score_kmeans_maxAbs and preprocessor_agc == s_score_agc_maxAbs:
-        return clusters_kmeans_maxAbs, s_score_kmeans_maxAbs, clusters_agc_maxAbs, s_score_agc_maxAbs
-    elif preprocessor_kmeans == s_score_kmeans_stdScaler and preprocessor_agc == s_score_agc_stdScaler:
-        return clusters_kmeans_stdScaler, s_score_kmeans_stdScaler, clusters_agc_stdScaler, s_score_agc_stdScaler
+    # clusters_kmeans_maxAbs, s_score_kmeans_maxAbs, clusters_agc_maxAbs, s_score_agc_maxAbs = clustering_data(pca_data_maxAbs)
+    results_maxAbs = clustering_data(pca_data_maxAbs,clustering_method)
+    # clusters_kmeans_stdScaler,s_score_kmeans_stdScaler, clusters_agc_stdScaler, s_score_agc_stdScaler = clustering_data(pca_data_stdScaler)
+    results_stdScaler = clustering_data(pca_data_stdScaler, clustering_method)
+    preprocessor = max(results_maxAbs[1],results_stdScaler[1])
+    if preprocessor == results_maxAbs[1]:
+        return results_maxAbs
+    else:
+        return results_stdScaler
+    
+    # preprocessor_agc = max(results_maxAbs.metric, results_stdScaler.metric)
+    #     return clusters_kmeans_maxAbs, s_score_kmeans_maxAbs, clusters_agc_maxAbs, s_score_agc_maxAbs
+    # elif preprocessor_kmeans == s_score_kmeans_stdScaler and preprocessor_agc == s_score_agc_stdScaler:
+    #     return clusters_kmeans_stdScaler, s_score_kmeans_stdScaler, clusters_agc_stdScaler, s_score_agc_stdScaler
 
 
     # df.to_csv("data.csv")

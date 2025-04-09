@@ -14,12 +14,12 @@
     </div>
      <script>
        try{
-          const clusteringResult = JSON.parse("{{ result|tojson|safe }}");
+          const {clusters, s_score} = JSON.parse("{{ result|tojson|safe }}");
           // if (!response.ok) {
           //   throw new Error(`HTTP error! Status: ${response.status}`);
           // }
           // const data = await response.json();
-          console.log(clusteringResult);
+          console.log(clusters, s_score);
           // data0 = data["data0"]
           // data1 = data["data1"]
           // clusters = data["clusters"]

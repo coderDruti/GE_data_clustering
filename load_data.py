@@ -2,8 +2,8 @@ import pandas as pd
 def load_data(file):
     
     cols = file.split("\t").pop(0)
-    print(cols)
-    print(len(cols))
+    # print(cols)
+    # print(len(cols))
 
     data = []
     # for x in file:

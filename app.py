@@ -76,7 +76,7 @@ def receive_data():
     if not items:
         print('No files found.')
     else:
-        print('Files:')
+        # print('Files:')
         file_id  = file_ID
         # file_name = items['name']
         # if file_name.endswith('.txt') or '.CEL' in file_name:
@@ -96,29 +96,33 @@ def receive_data():
     # Reset the stream position
     # file_stream.seek(0)
     # file_content = file_stream.read().decode("utf-8")
-    return redirect("inputClusteringMethod")
-
-@app.route("/inputClusteringMethod")
-def chooseClustering():
     return render_template("inputClusteringMethod.html")
+
+# @app.route("/inputClusteringMethod")
+# def chooseClustering():
+#     return render_template("inputClusteringMethod.html")
 
 @app.route("/output", methods=["POST"])
 def cluster():
     method = request.form["method"]
-    clusters_kmeans, s_score_kmeans,clusters_agc,s_score_agc= clustering.main(file_content) 
+    result = {}
+    clusters_kmeans, s_score_kmeans = [], None
+    clusters_agc, s_score_agc = [], None
     if method == "K-means clustering":
-        result ={
-            "clusters_kmeans":clusters_kmeans,
-            "s_score_kmeans":s_score_kmeans
-        }
+        clusters_kmeans, s_score_kmeans= clustering.main(file_content, "K-means clustering") 
+        return render_template("output.html", result={
+            'clusters':clusters_kmeans,
+            's_score':s_score_kmeans
+        })
     # data0 = " ".join([str(data) for data in data0])
     # data1 = " ".join([str(data) for data in data1])
     elif method == "Agglomerative clustering":
-        result ={
-            "clusters_agc":clusters_agc,
-            "s_score_agc":s_score_agc
-        }
-    return render_template("output.html", result=result)
+        clusters_agc,s_score_agc= clustering.main(file_content, "Agglomerative clustering")
+        return render_template("output.html", result={
+            'clusters':clusters_agc,
+            's_score':s_score_agc
+        })
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
